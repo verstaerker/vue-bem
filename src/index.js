@@ -23,21 +23,66 @@ function applyModifiers(el, modifiers, className, remove) {
   });
 }
 
-function getBEM(binding, vnode) {
-  const block = vnode.context.$options.name;
-  const element = binding.arg;
-  const modifiers = binding.value;
-
-  return {
-    block,
-    element,
-    modifiers,
-    className: block + (element ? `__${element}` : ''),
-  };
-}
-
 export default {
-  install(Vue) {
+  /**
+   * Plugin install method.
+   *
+   * @param {Object} Vue - The Vue instance
+   * @param {Object} options - The plugin options
+   * @param {Object} options.hyphenate - The plugin options
+   *
+   */
+  install(Vue, options) {
+    const hyphenateCache = {}; // TODO: test if this has not more downsides than profits.
+
+    /**
+     * Convert the given string to kebab-case.
+     *
+     * @param {String} str - The to be converted string.
+     *
+     * @returns {String}
+     */
+    function hyphenate(str) {
+      return hyphenateCache[str] // eslint-disable-line no-return-assign
+        || (hyphenateCache[str] = str.replace(/\B([A-Z0-9])/g, '-$1').toLowerCase());
+    }
+
+    /**
+     * Get BEM segments.
+     *
+     * @param {Object} binding - The Vue directive binding.
+     * @param {Object} vnode - The Vue directive vnode.
+     *
+     * @returns {Object}
+     */
+    function getBEM(binding, vnode) {
+      const modifiers = binding.value;
+      let block = vnode.context.$options.name;
+      let element = binding.arg;
+
+      if (options.hyphenate) {
+        block = hyphenate[block];
+
+        if (element) {
+          element = hyphenate[element];
+        }
+      }
+
+      return {
+        block,
+        element,
+        modifiers,
+        className: block + (element ? `__${element}` : ''),
+      };
+    }
+
+    /**
+     * Adds BEM classes to the element with the directive.
+     *
+     * e.g.
+     * input `v-bem:element.mixin="modifiers"`
+     * output `class="componentName componentName__element componentName--modifier mixin"`
+     */
     Vue.directive('em', {
       inserted(el, binding, vnode) {
         const {
