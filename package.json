@@ -1,0 +1,31 @@
+{
+  "name": "vue-bem-directive",
+  "version": "1.0.0-alpha",
+  "description": "A Vue.js directive to create BEM class names.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/verstaerker/vue-bem-directive.git"
+  },
+  "keywords": [
+    "vue",
+    "vuejs",
+    "vue.js",
+    "bem",
+    "vue-bem-directive",
+    "directive",
+    "class",
+    "classes",
+    "classname",
+    "css"
+  ],
+  "author": "Patric Eberle <line-in@derverstaerker.ch>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/verstaerker/vue-bem-directive/issues"
+  },
+  "homepage": "https://github.com/verstaerker/vue-bem-directive#readme"
+}

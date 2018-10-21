@@ -41,7 +41,14 @@ export default {
    *
    */
   install(Vue, options = {}) {
-    const internalOptions = { ...DEFAULT_OPTIONS, ...options };
+    const internalOptions = {
+      ...DEFAULT_OPTIONS,
+      ...options,
+      delimiters: {
+        ...DEFAULT_OPTIONS.delimiters,
+        ...options.delimiters
+      }
+    };
     const { delimiters, hyphenate } = internalOptions;
     const hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
     const hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
