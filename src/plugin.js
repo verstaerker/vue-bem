@@ -1,5 +1,10 @@
 import { DEFAULT_OPTIONS } from './shared';
-import { hyphenateString, getModifiers, addClass, removeClass } from './utils';
+import {
+  hyphenateString,
+  getModifiers,
+  addClass,
+  removeClass
+} from './utils';
 
 export default {
   /**
