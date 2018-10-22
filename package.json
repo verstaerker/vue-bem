@@ -2,9 +2,12 @@
   "name": "vue-bem-directive",
   "version": "1.0.0-alpha",
   "description": "A Vue.js directive to create BEM class names.",
-  "main": "src/index.js",
+  "main": "dist/vue-bem-directive.umd.min.js",
+  "module": "dist/vue-bem-directive.es.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "build": "npm run clean && node rollup.config.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +30,19 @@
   "bugs": {
     "url": "https://github.com/verstaerker/vue-bem-directive/issues"
   },
-  "homepage": "https://github.com/verstaerker/vue-bem-directive#readme"
+  "homepage": "https://github.com/verstaerker/vue-bem-directive#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.66.6",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-filesize": "^5.0.1",
+    "rollup-plugin-uglify": "^6.0.0",
+    "vue": "^2.5.17"
+  },
+  "peerDependencies": {
+    "vue": "^2.0.0"
+  }
 }

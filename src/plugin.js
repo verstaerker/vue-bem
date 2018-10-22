@@ -1,25 +1,5 @@
 import { DEFAULT_OPTIONS } from './shared';
-import { hyphenateString, getModifiers } from './utils';
-
-/**
- * Adds a class to the given DOM element.
- *
- * @param {Node} element - The to be modified element.
- * @param {String} className - The to be reoved class name.
- */
-function addClass(element, className) {
-  element.classList.add(className);
-}
-
-/**
- * Removes a class from the given DOM element.
- *
- * @param {Node} element - The to be modified element.
- * @param {String} className - The to be added class name.
- */
-function removeClass(element, className) {
-  element.classList.remove(className);
-}
+import { hyphenateString, getModifiers, addClass, removeClass } from './utils';
 
 export default {
   /**
@@ -134,8 +114,12 @@ export default {
             const oldModifierClasses = getModifiers(className, oldModifiers, internalOptions.delimiters, hyphenateModifier);
 
             oldModifierClasses.forEach((oldModifierClass) => {
-              if (!modifierClasses.includes(oldModifierClass)) {
+              const index = modifierClasses.indexOf(oldModifierClass);
+
+              if (index === -1) {
                 removeClass(el, oldModifierClass);
+              } else {
+                modifierClasses.splice(index, 1); // Value will not be removed and needs not to be added therefore.
               }
             });
           }

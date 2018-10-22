@@ -47,3 +47,23 @@ export function getModifiers(className, modifiers, delimiters, hyphenate) { // e
       : modifierStump;
   }).filter(Boolean);
 }
+
+/**
+ * Adds a class to the given DOM element.
+ *
+ * @param {Node} element - The to be modified element.
+ * @param {String} className - The to be reoved class name.
+ */
+export function addClass(element, className) {
+  element.classList.add(className);
+}
+
+/**
+ * Removes a class from the given DOM element.
+ *
+ * @param {Node} element - The to be modified element.
+ * @param {String} className - The to be added class name.
+ */
+export function removeClass(element, className) {
+  element.classList.remove(className);
+}

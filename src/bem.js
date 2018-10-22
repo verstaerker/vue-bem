@@ -1,4 +1,4 @@
-import { getModifiers } from '@/setup/plugins/bem-for-vue/src/utils';
+import { getModifiers } from './utils';
 
 /**
  * Returns an Array of BEM and mixin classes based on the given parameters.
