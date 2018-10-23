@@ -1,4 +1,4 @@
-# @verstarker/vue-bem
+# @verstaerker/vue-bem
 
 A [Vue.js](https://vuejs.org/) directive to create [BEM](http://getbem.com/) class names.
 
