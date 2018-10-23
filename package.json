@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest tests/ --config jest.config.js",
     "clean": "rimraf dist",
-    "build": "npm run clean && node rollup.config.js",
+    "build": "npm run clean && node rollup.config.js && npm run test",
     "lint": "eslint src; exit 0;"
   },
   "repository": {

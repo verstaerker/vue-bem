@@ -227,11 +227,7 @@ var plugin = {
             className = _getBEM.className;
 
         var mixins = Object.keys(binding.modifiers);
-        addClass(el, block);
-
-        if (element) {
-          addClass(el, className);
-        }
+        addClass(el, element ? className : block);
 
         if (modifiers) {
           getModifiers(className, modifiers, internalOptions.delimiters, hyphenateModifier).forEach(function (modifier) {
@@ -285,7 +281,7 @@ var plugin = {
 };
 
 /**
- * Returns an Array of BEM and mixin classes based on the given parameters.
+ * Returns a String of BEM and mixin classes based on the given parameters.
  *
  * @param {Object} options - The internal instance options.
  * @param {String} options.blockName - The block name for the current component.
@@ -296,7 +292,7 @@ var plugin = {
  * @param {Object} [args.modifiers] - An Object of to be applied modifiers.
  * @param {Array} [args.mixins] - An Array of to be applied mixin classes.
  *
- * @returns {Array}
+ * @returns {String}
  */
 
 function bem (_ref) {
@@ -304,20 +300,19 @@ function bem (_ref) {
       delimiters = _ref.delimiters,
       hyphenate = _ref.hyphenate;
   var classNames = [];
-
-  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
-
-  var length = args.length;
+  var length = (arguments.length <= 1 ? 0 : arguments.length - 1) < 4 ? arguments.length <= 1 ? 0 : arguments.length - 1 : 3;
   var className = blockName;
 
   if (!length) {
-    return [className];
+    return className;
+  }
+
+  if (typeof (arguments.length <= 1 ? undefined : arguments[1]) !== 'string') {
+    classNames.push(blockName);
   }
 
   for (var i = 0; i < length; i += 1) {
-    var value = args[i];
+    var value = i + 1 < 1 || arguments.length <= i + 1 ? undefined : arguments[i + 1];
 
     switch (_typeof(value)) {
       case 'string':
@@ -338,10 +333,16 @@ function bem (_ref) {
     }
   }
 
-  return classNames;
+  return classNames.join(' ');
 }
 
 var mixin = {
+  beforeCreate: function beforeCreate() {
+    if (!this.$bemOptions) {
+      this.$bemOptions = {};
+      throw new Error('Looks like the plugin of vue-bem is not used by Vue. Please do so or the mixin will not work!');
+    }
+  },
   created: function created() {
     var _this$$bemOptions = this.$bemOptions,
         blockSource = _this$$bemOptions.blockSource,

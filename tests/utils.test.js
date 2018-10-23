@@ -5,14 +5,14 @@ import {
   getModifiers,
   addClass,
   removeClass,
-} from '../src/utils';
+} from '../src/modules/utils';
 import {
   hyphenateStringCases,
   getModifierCases,
   addClassCases,
   removeClassCases,
 } from './testing-cases';
-import { HYPHENATE_CACHE } from '../src/shared';
+import { HYPHENATE_CACHE } from '../src/modules/shared';
 
 describe('hyphenateString', () => {
 

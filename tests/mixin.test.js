@@ -4,8 +4,8 @@ import {
   delimiters,
   directiveAndMixinCases,
 } from './testing-cases';
-import mixin from '../src/mixin';
-import plugin from '../src/plugin';
+import mixin from '../src/modules/mixin';
+import plugin from '../src/modules/plugin';
 
 describe('Check invalid use of mixin', () => {
   test('Expect global mixin to throw error because of missin plugin', () => {
@@ -71,7 +71,7 @@ describe('Check mixin output', () => {
   Object.entries(directiveAndMixinCases).forEach((testCase) => {
     const [output, input] = testCase;
 
-    test(`Return of the mixins "bem" is ${output}`, () => {
+    test(`Return of the mixins "bem" is "${output}"`, () => {
       expect(vm.bem(...input.mixin)).toBe(output);
     });
   });
