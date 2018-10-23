@@ -24,11 +24,11 @@ const builder = plugins => rollup.rollup({
 builder([uglify()])
   .then((bundle) => {
     bundle.write({
-      file: 'vue-bem-directive.umd.min.js',
+      file: 'vue-bem.umd.min.js',
       dir: 'dist',
       format: 'umd',
       exports: 'named',
-      name: 'vueBemDirective',
+      name: 'vueBem',
       sourcemap: true,
     });
   });
@@ -36,7 +36,7 @@ builder([uglify()])
 builder()
   .then((bundle) => {
     bundle.write({
-      file: 'vue-bem-directive.esm.js',
+      file: 'vue-bem.esm.js',
       dir: 'dist',
       format: 'esm',
       sourcemap: true,

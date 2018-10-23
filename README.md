@@ -1,12 +1,12 @@
-# vue-bem-directive
+# @verstarker/vue-bem
 
 A [Vue.js](https://vuejs.org/) directive to create [BEM](http://getbem.com/) class names.
 
 This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn) and [vue-bem](https://github.com/AndersSchmidtHansen/vue-bem).
 
-## ALPHA
+## BETA version
 
-This plugin is currently in alpha state and not recommended for productive use!
+This plugin is currently in beta state and not recommended for productive use!
 
 ## What's the difference to vue-bem-cn and vue-bem?
 
@@ -28,15 +28,17 @@ This plugin tries to combine the positive effects of both those plugins:
 * You can not change mixin classes dynamically. 
 * To prevent recalculation of unchanged modifiers you need to define a computed value which returns the modifier Object (instead of an inline attribute Object).
 
-## How to use it
+## How to use the directive
 
-The vue-bem-directive is used as any other Vue.js directive.
+The vue-bem directive is used as any other Vue.js directive.
 
 ```
 v-bem<:element><.mixin>="<modifier>"
 ```
 
 All parts are optional. If you only use `v-bem` you will still get the block class thought.
+
+## TODO: mixin
 
 ## Install
 
