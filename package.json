@@ -3,11 +3,11 @@
   "version": "1.0.0-alpha",
   "description": "A Vue.js directive to create BEM class names.",
   "main": "dist/vue-bem-directive.umd.min.js",
-  "module": "dist/vue-bem-directive.es.js",
+  "module": "dist/vue-bem-directive.esm.js",
   "scripts": {
     "test": "jest tests/ --config jest.config.js",
     "clean": "rimraf dist",
-    "build": "npm run clean && node rollup.config.js && npm run test",
+    "build": "eslint src && npm run clean && node rollup.config.js && npm run test",
     "lint": "eslint src; exit 0;"
   },
   "repository": {

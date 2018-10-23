@@ -375,4 +375,4 @@ var mixin = {
 
 export default plugin;
 export { mixin as bemMixin };
-//# sourceMappingURL=vue-bem-directive.es6.js.map
+//# sourceMappingURL=vue-bem-directive.esm.js.map

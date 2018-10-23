@@ -8,7 +8,7 @@ import {
   mixinName,
   elementClassName, directiveAndMixinCases,
 } from './testing-cases';
-import plugin from '../dist/vue-bem-directive.umd.min';
+import plugin from '../dist/vue-bem-directive.esm';
 
 describe('Check plugin installation', () => {
   const localVue = createLocalVue();

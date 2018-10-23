@@ -31,14 +31,15 @@ builder([uglify()])
       name: 'vueBemDirective',
       sourcemap: true,
     });
-});
+  });
 
 builder()
   .then((bundle) => {
     bundle.write({
-      file: 'vue-bem-directive.es6.js',
+      file: 'vue-bem-directive.esm.js',
       dir: 'dist',
-      format: 'es',
+      format: 'esm',
       sourcemap: true,
     });
-});
+  });
+
