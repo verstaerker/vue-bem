@@ -1,7 +1,7 @@
 import { getModifiers } from './utils';
 
 /**
- * Returns an Array of BEM and mixin classes based on the given parameters.
+ * Returns a String of BEM and mixin classes based on the given parameters.
  *
  * @param {Object} options - The internal instance options.
  * @param {String} options.blockName - The block name for the current component.
@@ -12,15 +12,19 @@ import { getModifiers } from './utils';
  * @param {Object} [args.modifiers] - An Object of to be applied modifiers.
  * @param {Array} [args.mixins] - An Array of to be applied mixin classes.
  *
- * @returns {Array}
+ * @returns {String}
  */
 export default function({ blockName, delimiters, hyphenate }, ...args) {
   const classNames = [];
-  const { length } = args;
+  const length = args.length < 4 ? args.length : 3;
   let className = blockName;
 
   if (!length) {
-    return [className];
+    return className;
+  }
+
+  if (typeof args[0] !== 'string') {
+    classNames.push(blockName);
   }
 
   for (let i = 0; i < length; i += 1) {
@@ -44,5 +48,5 @@ export default function({ blockName, delimiters, hyphenate }, ...args) {
     }
   }
 
-  return classNames;
+  return classNames.join(' ');
 }

@@ -5,7 +5,7 @@
   "main": "dist/vue-bem-directive.umd.min.js",
   "module": "dist/vue-bem-directive.es.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest tests/ --config jest.config.js",
     "clean": "rimraf dist",
     "build": "npm run clean && node rollup.config.js",
     "lint": "eslint src; exit 0;"
@@ -35,17 +35,22 @@
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
+    "@vue/test-utils": "^1.0.0-beta.25",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
     "babel-preset-es2015-rollup": "^3.0.0",
     "eslint": "^5.7.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-valantic": "file:../../../../../12_eslint-config-valantic",
+    "eslint-config-valantic": "git+https://github.com/valantic/eslint-config-valantic.git#5.0.0",
     "eslint-plugin-import": "^2.14.0",
+    "jest": "^23.6.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-filesize": "^5.0.1",
     "rollup-plugin-uglify": "^6.0.0",
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vue-template-compiler": "^2.5.17"
   },
   "peerDependencies": {
     "vue": "^2.0.0"

@@ -83,11 +83,7 @@ export default {
         } = getBEM(binding, vnode);
         const mixins = Object.keys(binding.modifiers);
 
-        addClass(el, block);
-
-        if (element) {
-          addClass(el, className);
-        }
+        addClass(el, element ? className : block);
 
         if (modifiers) {
           getModifiers(className, modifiers, internalOptions.delimiters, hyphenateModifier).forEach((modifier) => {
