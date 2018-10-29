@@ -1,3 +1,8 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
 # Logs
 logs
 *.log
@@ -59,3 +64,14 @@ typings/
 
 # next.js build output
 .next
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+/dist/
+/tests/unit/coverage/
+
+# Visual Studio Code
+.vscode
