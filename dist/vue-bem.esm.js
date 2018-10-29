@@ -1,3 +1,20 @@
+var TYPE_STRING = 'string';
+var DEFAULT_OPTIONS = {
+  namespace: '',
+  blockSource: 'name',
+  method: '$bem',
+  hyphenate: {
+    blockAndElement: false,
+    modifier: true
+  },
+  delimiters: {
+    element: '__',
+    modifier: '--',
+    value: '-'
+  }
+};
+var HYPHENATE_CACHE = {};
+
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     _typeof = function (obj) {
@@ -11,77 +28,6 @@ function _typeof(obj) {
 
   return _typeof(obj);
 }
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-}
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
-}
-
-function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-}
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-var TYPE_STRING = 'string';
-var DEFAULT_OPTIONS = {
-  namespace: '',
-  blockSource: 'name',
-  methodName: 'bem',
-  hyphenate: {
-    blockAndElement: false,
-    modifier: true
-  },
-  delimiters: {
-    element: '__',
-    modifier: '--',
-    value: '-'
-  }
-};
-var HYPHENATE_CACHE = {};
 
 /**
  * Convert the given string to kebab-case.
@@ -108,6 +54,7 @@ function hyphenateString(str) {
 
 function getModifiers(className, modifiers, delimiters, hyphenate) {
   // eslint-disable-line max-params
+  var classNameWithDelimiter = className + delimiters.modifier;
   return Object.entries(modifiers || {}).map(function (entry) {
     var modifier = entry[0];
     var value = entry[1];
@@ -127,7 +74,7 @@ function getModifiers(className, modifiers, delimiters, hyphenate) {
       }
     }
 
-    return modifierStump ? className + delimiters.modifier + (hyphenate ? hyphenateString(modifierStump) : modifierStump) : modifierStump;
+    return modifierStump ? classNameWithDelimiter + (hyphenate ? hyphenateString(modifierStump) : modifierStump) : modifierStump;
   }).filter(Boolean);
 }
 /**
@@ -164,16 +111,13 @@ var plugin = {
     var customOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
       delimiters: {}
     };
-
-    var internalOptions = _objectSpread({}, DEFAULT_OPTIONS, customOptions, {
-      delimiters: _objectSpread({}, DEFAULT_OPTIONS.delimiters, customOptions.delimiters)
-    });
-
-    var delimiters = internalOptions.delimiters,
-        hyphenate = internalOptions.hyphenate;
+    var delimiters = Object.assign({}, DEFAULT_OPTIONS.delimiters, customOptions.delimiters);
+    var options = Object.assign({}, DEFAULT_OPTIONS, customOptions);
+    var hyphenate = options.hyphenate;
     var hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
     var hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
-    Vue.prototype.$bemOptions = internalOptions;
+    options.delimiters = delimiters;
+    Vue.prototype.$bemOptions = options;
     /**
      * Get BEM segments.
      *
@@ -185,7 +129,7 @@ var plugin = {
 
     function getBEM(binding, vnode) {
       var modifiers = binding.value;
-      var block = internalOptions.namespace + vnode.context.$options[internalOptions.blockSource];
+      var block = options.namespace + vnode.context.$options[options.blockSource];
       var element = binding.arg;
 
       if (hyphenateBlockAndElement) {
@@ -230,7 +174,7 @@ var plugin = {
         addClass(el, element ? className : block);
 
         if (modifiers) {
-          getModifiers(className, modifiers, internalOptions.delimiters, hyphenateModifier).forEach(function (modifier) {
+          getModifiers(className, modifiers, options.delimiters, hyphenateModifier).forEach(function (modifier) {
             addClass(el, modifier);
           });
         }
@@ -252,10 +196,10 @@ var plugin = {
               modifiers = _getBEM2.modifiers,
               className = _getBEM2.className;
 
-          var modifierClasses = getModifiers(className, modifiers, internalOptions.delimiters, hyphenateModifier);
+          var modifierClasses = getModifiers(className, modifiers, options.delimiters, hyphenateModifier);
 
           if (oldModifiers) {
-            var oldModifierClasses = getModifiers(className, oldModifiers, internalOptions.delimiters, hyphenateModifier);
+            var oldModifierClasses = getModifiers(className, oldModifiers, options.delimiters, hyphenateModifier);
             oldModifierClasses.forEach(function (oldModifierClass) {
               var index = modifierClasses.indexOf(oldModifierClass);
 
@@ -294,37 +238,24 @@ function bem (_ref) {
   var blockName = _ref.blockName,
       delimiters = _ref.delimiters,
       hyphenate = _ref.hyphenate;
+  var modifier = (arguments.length <= 2 ? undefined : arguments[2]) || (arguments.length <= 1 ? undefined : arguments[1]);
   var classNames = [];
-  var length = (arguments.length <= 1 ? 0 : arguments.length - 1) < 3 ? arguments.length <= 1 ? 0 : arguments.length - 1 : 2;
   var className = blockName;
 
-  if (!length) {
+  if (!(arguments.length <= 1 ? 0 : arguments.length - 1)) {
     return className;
   }
 
   if (_typeof(arguments.length <= 1 ? undefined : arguments[1]) !== TYPE_STRING) {
     // eslint-disable-line valid-typeof
     classNames.push(blockName);
+  } else {
+    className = blockName + delimiters.element + (arguments.length <= 1 ? undefined : arguments[1]);
+    classNames.push(className);
   }
 
-  for (var i = 0; i < length; i += 1) {
-    var value = i + 1 < 1 || arguments.length <= i + 1 ? undefined : arguments[i + 1];
-
-    switch (_typeof(value)) {
-      case TYPE_STRING:
-        className = blockName + delimiters.element + value;
-        classNames.push(className);
-        break;
-
-      case 'object':
-        // Is modifier
-        if (value && value.constructor === Object) {
-          // Is not NULL
-          classNames.push.apply(classNames, _toConsumableArray(getModifiers(className, value, delimiters, hyphenate)));
-        }
-
-      // no default
-    }
+  if (modifier && _typeof(modifier) === 'object' && modifier.constructor === Object) {
+    classNames = classNames.concat(getModifiers(className, modifier, delimiters, hyphenate));
   }
 
   return classNames.join(' ');
@@ -332,12 +263,13 @@ function bem (_ref) {
 
 var mixin = {
   created: function created() {
-    var _this$$bemOptions = this.$bemOptions,
-        blockSource = _this$$bemOptions.blockSource,
-        namespace = _this$$bemOptions.namespace,
-        hyphenate = _this$$bemOptions.hyphenate,
-        delimiters = _this$$bemOptions.delimiters,
-        methodName = _this$$bemOptions.methodName;
+    var _ref = this.$bemOptions || {},
+        blockSource = _ref.blockSource,
+        namespace = _ref.namespace,
+        hyphenate = _ref.hyphenate,
+        delimiters = _ref.delimiters,
+        method = _ref.method;
+
     var block = this.$options[blockSource];
 
     if (block && _typeof(block) === TYPE_STRING) {
@@ -347,7 +279,7 @@ var mixin = {
       var namespacedBlock = (namespace || '') + block;
       var blockName = hyphenateBlockAndElement ? hyphenateString(namespacedBlock) : namespacedBlock;
 
-      this[methodName] = function () {
+      this[method] = function () {
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
         }

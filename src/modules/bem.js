@@ -15,35 +15,24 @@ import { TYPE_STRING } from './shared';
  * @returns {String}
  */
 export default function({ blockName, delimiters, hyphenate }, ...args) {
-  const classNames = [];
-  const length = args.length < 3 ? args.length : 2;
+  const modifier = args[1] || args[0];
+  let classNames = [];
   let className = blockName;
 
-  if (!length) {
+  if (!args.length) {
     return className;
   }
 
   if (typeof args[0] !== TYPE_STRING) { // eslint-disable-line valid-typeof
     classNames.push(blockName);
+  } else {
+    className = blockName + delimiters.element + args[0];
+
+    classNames.push(className);
   }
 
-  for (let i = 0; i < length; i += 1) {
-    const value = args[i];
-
-    switch (typeof value) {
-      case TYPE_STRING:
-        className = blockName + delimiters.element + value;
-
-        classNames.push(className);
-        break;
-
-      case 'object': // Is modifier
-        if (value && value.constructor === Object) { // Is not NULL
-          classNames.push(...getModifiers(className, value, delimiters, hyphenate));
-        }
-
-        // no default
-    }
+  if (modifier && typeof modifier === 'object' && modifier.constructor === Object) {
+    classNames = classNames.concat(getModifiers(className, modifier, delimiters, hyphenate));
   }
 
   return classNames.join(' ');

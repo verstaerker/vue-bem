@@ -2,7 +2,7 @@ export const TYPE_STRING = 'string';
 export const DEFAULT_OPTIONS = {
   namespace: '',
   blockSource: 'name',
-  methodName: 'bem',
+  method: '$bem',
   hyphenate: {
     blockAndElement: false,
     modifier: true,

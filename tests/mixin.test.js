@@ -52,8 +52,8 @@ describe('Check global installation of mixin', () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
-  test('Component has "bem" property', () => {
-    expect(typeof wrapper.vm.bem).toBe('function');
+  test('Component has "$bem" property', () => {
+    expect(typeof wrapper.vm.$bem).toBe('function');
   });
 });
 
@@ -72,8 +72,8 @@ describe('Check mixin output', () => {
   Object.entries(directiveAndMixinCases).forEach((testCase) => {
     const [output, input] = testCase;
 
-    test(`Return of the mixins "bem" is "${output}"`, () => {
-      expect(vm.bem(...input.mixin)).toBe(output);
+    test(`Return of the mixins "$bem" is "${output}"`, () => {
+      expect(vm.$bem(...input.mixin)).toBe(output);
     });
   });
 });

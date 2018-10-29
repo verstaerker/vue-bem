@@ -23,6 +23,8 @@ export function hyphenateString(str) {
  * @returns {Array.<String>}
  */
 export function getModifiers(className, modifiers, delimiters, hyphenate) { // eslint-disable-line max-params
+  const classNameWithDelimiter = className + delimiters.modifier;
+
   return Object.entries(modifiers || {}).map((entry) => {
     const modifier = entry[0];
     const value = entry[1];
@@ -43,7 +45,7 @@ export function getModifiers(className, modifiers, delimiters, hyphenate) { // e
     }
 
     return modifierStump
-      ? className + delimiters.modifier + (hyphenate ? hyphenateString(modifierStump) : modifierStump)
+      ? classNameWithDelimiter + (hyphenate ? hyphenateString(modifierStump) : modifierStump)
       : modifierStump;
   }).filter(Boolean);
 }

@@ -16,19 +16,15 @@ export default {
    *
    */
   install(Vue, customOptions = { delimiters: {} }) {
-    const internalOptions = {
-      ...DEFAULT_OPTIONS,
-      ...customOptions,
-      delimiters: {
-        ...DEFAULT_OPTIONS.delimiters,
-        ...customOptions.delimiters
-      }
-    };
-    const { delimiters, hyphenate } = internalOptions;
+    const delimiters = Object.assign({}, DEFAULT_OPTIONS.delimiters, customOptions.delimiters);
+    const options = Object.assign({}, DEFAULT_OPTIONS, customOptions);
+    const { hyphenate } = options;
     const hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
     const hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
 
-    Vue.prototype.$bemOptions = internalOptions;
+    options.delimiters = delimiters;
+
+    Vue.prototype.$bemOptions = options;
 
     /**
      * Get BEM segments.
@@ -40,7 +36,7 @@ export default {
      */
     function getBEM(binding, vnode) {
       const modifiers = binding.value;
-      let block = internalOptions.namespace + vnode.context.$options[internalOptions.blockSource];
+      let block = options.namespace + vnode.context.$options[options.blockSource];
       let element = binding.arg;
 
       if (hyphenateBlockAndElement) {
@@ -85,7 +81,7 @@ export default {
         addClass(el, element ? className : block);
 
         if (modifiers) {
-          getModifiers(className, modifiers, internalOptions.delimiters, hyphenateModifier).forEach((modifier) => {
+          getModifiers(className, modifiers, options.delimiters, hyphenateModifier).forEach((modifier) => {
             addClass(el, modifier);
           });
         }
@@ -104,10 +100,10 @@ export default {
 
         if (modifiersValue !== oldModifiers) {
           const { modifiers, className } = getBEM(binding, vnode);
-          const modifierClasses = getModifiers(className, modifiers, internalOptions.delimiters, hyphenateModifier);
+          const modifierClasses = getModifiers(className, modifiers, options.delimiters, hyphenateModifier);
 
           if (oldModifiers) {
-            const oldModifierClasses = getModifiers(className, oldModifiers, internalOptions.delimiters, hyphenateModifier);
+            const oldModifierClasses = getModifiers(className, oldModifiers, options.delimiters, hyphenateModifier);
 
             oldModifierClasses.forEach((oldModifierClass) => {
               const index = modifierClasses.indexOf(oldModifierClass);

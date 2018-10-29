@@ -73,7 +73,9 @@ This plugin is currently in beta state and not recommended for productive use!
   </tbody>
 </table>
 
-## How to use the directive
+## How to use
+
+### Directive
 
 The vue-bem directive is used as any other Vue.js directive.
 
@@ -83,17 +85,71 @@ v-bem<:element>="<modifier>"
 
 All parts are optional. If you only use `v-bem` you will still get the block class thought.
 
-## TODO: mixin
+### Mixin
+
+The mixin adds a `$bem` (or as configured) method to the extended component which you can use to create BEM classes from within JavaScript.
+
+```
+render(h) {
+  const className = this.$bem(<element> [, <modifier>]);
+}
+```
+
+### Attributes
+
+#### Element (String)
+
+The element name which will be concatenated with the block name using the `element` delimiter as glue.
+
+#### Modifier (Object)
+
+The to be applied modifiers which will be concatenated with the block or element name using the `modifier` delimiter as glue.
+
+A value can be given to each modifier (which will be concatenated using the `value` delimiter as glue):
+
+- Type `String` and `Number` will be added as a value to the modifier class
+- Type `Boolean` will add/remove the modifier and not add a value to the modifier
 
 ## Install
 
-TODO: Add installation process
+### Directive
+
+The directive is delivered as a Vue plugin. You can install it as any other plugin:
+
+```javascript
+import Vue from 'vue';
+import vueBem from '@verstaerker/vue-bem';
+
+Vue.use(vueBem);
+
+new Vue(/* ... */);
+```
+
+### Mixin
+
+To use the mixin you MUST install the plugin first. Then you can use the mixin as any other Vue mixin (locally or globally). It is recommended to use the mixin locally when needed.
+
+```javascript
+// component.vue
+import bemMixin from '@verstaerker/vue-bem'
+
+export default {
+  mixins: [bemMixin],
+  render(h) {
+    const className = this.$bem('element');
+    
+    // ...
+  }
+}
+```
 
 ## Settings
 
 ```
+// Defaults
 {
   namespace: '',
+  method: '$bem'
   hyphenate: {
     blockAndElement: false,
     modifier: true,
@@ -110,15 +166,25 @@ TODO: Add installation process
 
 Can be used to add a static namespace to the beginning of every class. Must include the delimiter.
 
+### `mixin` (String)
+
+Defines the name of the bem method of the mixin.
+
 ### `hyphenate` (Boolean|Object)
 
 Allows to enable auto hyphenating of `block`, `element` and `modifiers`. Mixins are never touched. By default hyphenating is only applied to `modifiers` to allow the use of camelCase key names for the modifier Object. It is recommended to write `block` and `element` already in kebab case if you prepare so because it removes the conversion step.
 
-### `delimiters` (String)
+### `delimiters` (Object)
 
 Allows to define custom delimiters between `block`, `element` and `modifier`.
 
+#### `delimiters.element` (String)
+#### `delimiters.modifier` (String)
+#### `delimiters.value` (String)
+
 ## Examples
+
+The following examples show how to create block, element and modifier classes. You can combine the directive with static or dynamic class bindings.
 
 ### Only block
 
@@ -138,16 +204,6 @@ Allows to define custom delimiters between `block`, `element` and `modifier`.
 <div class="block__element"></div>
 ```
 
-### With mixin
-
-Note: can also be chained.
-
-```vue
-<div v-bem.mixin></div>
-
-<!-- will become -->
-<div class="block mixin"></div>
-```
 ### Width modifier
 
 Note: There is no limit to the number of modifiers.
@@ -164,12 +220,12 @@ Note: There is no limit to the number of modifiers.
 
 ```vue
 <!-- `modifiers` is a computed value returning `{ color: 'red' }` -->
-<div v-bem:element.mixin="modifiers"></div>
+<div v-bem:element="modifiers"></div>
 
 <!-- will become -->
-<div class="block__element block__element--color-red mixin"></div>
+<div class="block__element block__element--color-red"></div>
 ```
 
-## TODO's
+## License
 
-- [ ] Browser testing
+MIT

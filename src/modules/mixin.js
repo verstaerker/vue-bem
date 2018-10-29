@@ -9,8 +9,8 @@ const mixin = {
       namespace,
       hyphenate,
       delimiters,
-      methodName
-    } = this.$bemOptions;
+      method
+    } = this.$bemOptions || {};
     const block = this.$options[blockSource];
 
     if (block && typeof block === TYPE_STRING) { // eslint-disable-line valid-typeof
@@ -19,7 +19,7 @@ const mixin = {
       const namespacedBlock = (namespace || '') + block;
       const blockName = hyphenateBlockAndElement ? hyphenateString(namespacedBlock) : namespacedBlock;
 
-      this[methodName] = (...args) => bem({ blockName, delimiters, hyphenate: hyphenateModifier }, ...args);
+      this[method] = (...args) => bem({ blockName, delimiters, hyphenate: hyphenateModifier }, ...args);
     }
   }
 };
@@ -27,8 +27,6 @@ const mixin = {
 if (process.env.NODE_ENV !== 'production') {
   mixin.beforeCreate = function() {
     if (!this.$bemOptions) {
-      this.$bemOptions = {};
-
       throw new Error('Looks like the plugin of vue-bem is not used by Vue. Please do so or the mixin will not work!');
     }
   };
