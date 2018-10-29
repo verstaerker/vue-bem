@@ -229,11 +229,11 @@ Note: There is no limit to the number of modifiers.
 #### All together
 
 ```vue
-<!-- `modifiers` is a computed value returning `{ color: 'red' }` -->
+<!-- `modifiers` is a computed value returning `{ visible: true }` -->
 <div v-bem:element="modifiers"></div>
 
 <!-- will become -->
-<div class="block__element block__element--color-red"></div>
+<div class="block__element block__element--visible"></div>
 ```
 
 ### Mixin
@@ -267,7 +267,7 @@ computed: {
   }
 },
 render(h) {
-  const className = this.$bem(this.modifiers); // 'block--color-red'
+  const className = this.$bem(this.modifiers); // 'block block--color-red'
 }
 ```
 
@@ -277,12 +277,12 @@ render(h) {
 computed: {
   modifiers() {
     return {
-      color: this.$props.color
+      visible: this.$props.visible
     }
   }
 },
 render(h) {
-  const className = this.$bem('element', this.modifiers); // 'block__element--color-red'
+  const className = this.$bem('element', this.modifiers); // 'block__element block__element--visible'
 }
 ```
 
