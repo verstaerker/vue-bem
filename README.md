@@ -8,6 +8,14 @@ This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn)
 
 This plugin is currently in beta state and not recommended for productive use!
 
+## Table of Contents
+
+* [Comparison](#comparison)
+* [How to use](#how-to-use)
+* [Install](#install)
+* [Examples](#examples)
+* [License](#license)
+
 ## Comparison
 
 <table>
@@ -186,7 +194,9 @@ Allows to define custom delimiters between `block`, `element` and `modifier`.
 
 The following examples show how to create block, element and modifier classes. You can combine the directive with static or dynamic class bindings.
 
-### Only block
+### Directive
+
+#### Only block
 
 ```vue
 <div v-bem></div>
@@ -195,7 +205,7 @@ The following examples show how to create block, element and modifier classes. Y
 <div class="block"></div>
 ```
 
-### Only element
+#### Only element
 
 ```vue
 <div v-bem:element></div>
@@ -204,7 +214,7 @@ The following examples show how to create block, element and modifier classes. Y
 <div class="block__element"></div>
 ```
 
-### Width modifier
+#### With modifier(s)
 
 Note: There is no limit to the number of modifiers.
 
@@ -216,7 +226,7 @@ Note: There is no limit to the number of modifiers.
 <div class="block block--color-red"></div>
 ```
 
-### All together
+#### All together
 
 ```vue
 <!-- `modifiers` is a computed value returning `{ color: 'red' }` -->
@@ -224,6 +234,56 @@ Note: There is no limit to the number of modifiers.
 
 <!-- will become -->
 <div class="block__element block__element--color-red"></div>
+```
+
+### Mixin
+
+#### Only block
+
+```javascript
+render(h) {
+  const className = this.$bem(); // 'block'
+}
+```
+
+#### With modifier(s)
+
+```javascript
+render(h) {
+  const className = this.$bem('element'); // 'block__element'
+}
+```
+
+#### Only element
+
+Note: There is no limit to the number of modifiers.
+
+```javascript
+computed: {
+  modifiers() {
+    return {
+      color: this.$props.color
+    }
+  }
+},
+render(h) {
+  const className = this.$bem(this.modifiers); // 'block--color-red'
+}
+```
+
+#### All together
+
+```javascript
+computed: {
+  modifiers() {
+    return {
+      color: this.$props.color
+    }
+  }
+},
+render(h) {
+  const className = this.$bem('element', this.modifiers); // 'block__element--color-red'
+}
 ```
 
 ## License
