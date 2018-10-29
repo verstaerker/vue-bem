@@ -4,10 +4,6 @@ Adds a directive and (optional) mixin to your [Vue.js](https://vuejs.org/) proje
 
 This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn) and [vue-bem](https://github.com/AndersSchmidtHansen/vue-bem).
 
-## BETA version
-
-This plugin is currently in beta state and not recommended for productive use!
-
 ## Table of Contents
 
 * [Comparison](#comparison)

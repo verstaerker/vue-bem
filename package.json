@@ -1,6 +1,6 @@
 {
   "name": "@verstaerker/vue-bem",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "description": "A Vue.js directive and mixin to create BEM class names.",
   "main": "dist/vue-bem.umd.min.js",
   "module": "dist/vue-bem.esm.js",
