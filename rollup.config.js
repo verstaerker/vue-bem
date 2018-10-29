@@ -2,6 +2,7 @@ const rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const { uglify } = require('rollup-plugin-uglify');
 const filesize = require('rollup-plugin-filesize');
+const replace = require('rollup-plugin-replace');
 
 /**
  * Creates a rollup builder instance.
@@ -17,6 +18,10 @@ const builder = plugins => rollup.rollup({
       runtimeHelpers: true,
       exclude: 'node_modules/**',
     }),
+    replace({
+      'exclude': 'node_modules/**',
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    }),
     filesize()
   ].concat(plugins || []),
 });
@@ -29,7 +34,7 @@ builder([uglify()])
       format: 'umd',
       exports: 'named',
       name: 'vueBem',
-      sourcemap: true,
+      sourcemap: false,
     });
   });
 

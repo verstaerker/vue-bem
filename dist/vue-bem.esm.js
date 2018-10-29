@@ -66,6 +66,7 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
+var TYPE_STRING = 'string';
 var DEFAULT_OPTIONS = {
   namespace: '',
   blockSource: 'name',
@@ -119,7 +120,7 @@ function getModifiers(className, modifiers, delimiters, hyphenate) {
           modifierStump = modifier;
           break;
 
-        case 'string': // Fall through
+        case TYPE_STRING: // Fall through
 
         case 'number':
           modifierStump = modifier + delimiters.value + value;
@@ -206,8 +207,8 @@ var plugin = {
      * Adds BEM classes to the element with the directive.
      *
      * e.g.
-     * input `v-bem:element.mixin="modifiers"`
-     * output `class="componentName componentName__element componentName--modifier mixin"`
+     * input `v-bem:element="modifiers"`
+     * output `class="componentName componentName__element componentName--modifier"`
      */
 
 
@@ -226,7 +227,6 @@ var plugin = {
             modifiers = _getBEM.modifiers,
             className = _getBEM.className;
 
-        var mixins = Object.keys(binding.modifiers);
         addClass(el, element ? className : block);
 
         if (modifiers) {
@@ -234,10 +234,6 @@ var plugin = {
             addClass(el, modifier);
           });
         }
-
-        mixins.forEach(function (mixin) {
-          addClass(el, mixin);
-        });
       },
 
       /**
@@ -290,7 +286,6 @@ var plugin = {
  * @param {Object} args - The arguments used on the method call.
  * @param {String} [args.element] - An optional element name.
  * @param {Object} [args.modifiers] - An Object of to be applied modifiers.
- * @param {Array} [args.mixins] - An Array of to be applied mixin classes.
  *
  * @returns {String}
  */
@@ -300,14 +295,15 @@ function bem (_ref) {
       delimiters = _ref.delimiters,
       hyphenate = _ref.hyphenate;
   var classNames = [];
-  var length = (arguments.length <= 1 ? 0 : arguments.length - 1) < 4 ? arguments.length <= 1 ? 0 : arguments.length - 1 : 3;
+  var length = (arguments.length <= 1 ? 0 : arguments.length - 1) < 3 ? arguments.length <= 1 ? 0 : arguments.length - 1 : 2;
   var className = blockName;
 
   if (!length) {
     return className;
   }
 
-  if (typeof (arguments.length <= 1 ? undefined : arguments[1]) !== 'string') {
+  if (_typeof(arguments.length <= 1 ? undefined : arguments[1]) !== TYPE_STRING) {
+    // eslint-disable-line valid-typeof
     classNames.push(blockName);
   }
 
@@ -315,7 +311,7 @@ function bem (_ref) {
     var value = i + 1 < 1 || arguments.length <= i + 1 ? undefined : arguments[i + 1];
 
     switch (_typeof(value)) {
-      case 'string':
+      case TYPE_STRING:
         className = blockName + delimiters.element + value;
         classNames.push(className);
         break;
@@ -323,10 +319,8 @@ function bem (_ref) {
       case 'object':
         // Is modifier
         if (value && value.constructor === Object) {
+          // Is not NULL
           classNames.push.apply(classNames, _toConsumableArray(getModifiers(className, value, delimiters, hyphenate)));
-        } else if (Array.isArray(value)) {
-          // Is mixin
-          classNames.push.apply(classNames, _toConsumableArray(value));
         }
 
       // no default
@@ -337,12 +331,6 @@ function bem (_ref) {
 }
 
 var mixin = {
-  beforeCreate: function beforeCreate() {
-    if (!this.$bemOptions) {
-      this.$bemOptions = {};
-      throw new Error('Looks like the plugin of vue-bem is not used by Vue. Please do so or the mixin will not work!');
-    }
-  },
   created: function created() {
     var _this$$bemOptions = this.$bemOptions,
         blockSource = _this$$bemOptions.blockSource,
@@ -352,7 +340,8 @@ var mixin = {
         methodName = _this$$bemOptions.methodName;
     var block = this.$options[blockSource];
 
-    if (block && typeof block === 'string') {
+    if (block && _typeof(block) === TYPE_STRING) {
+      // eslint-disable-line valid-typeof
       var hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
       var hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
       var namespacedBlock = (namespace || '') + block;

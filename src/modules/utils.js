@@ -1,4 +1,4 @@
-import { HYPHENATE_CACHE } from './shared';
+import { HYPHENATE_CACHE, TYPE_STRING } from './shared';
 
 /**
  * Convert the given string to kebab-case.
@@ -34,7 +34,7 @@ export function getModifiers(className, modifiers, delimiters, hyphenate) { // e
           modifierStump = modifier;
           break;
 
-        case 'string':
+        case TYPE_STRING:
         // Fall through
 
         case 'number':

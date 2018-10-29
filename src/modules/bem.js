@@ -1,4 +1,5 @@
 import { getModifiers } from './utils';
+import { TYPE_STRING } from './shared';
 
 /**
  * Returns a String of BEM and mixin classes based on the given parameters.
@@ -10,20 +11,19 @@ import { getModifiers } from './utils';
  * @param {Object} args - The arguments used on the method call.
  * @param {String} [args.element] - An optional element name.
  * @param {Object} [args.modifiers] - An Object of to be applied modifiers.
- * @param {Array} [args.mixins] - An Array of to be applied mixin classes.
  *
  * @returns {String}
  */
 export default function({ blockName, delimiters, hyphenate }, ...args) {
   const classNames = [];
-  const length = args.length < 4 ? args.length : 3;
+  const length = args.length < 3 ? args.length : 2;
   let className = blockName;
 
   if (!length) {
     return className;
   }
 
-  if (typeof args[0] !== 'string') {
+  if (typeof args[0] !== TYPE_STRING) { // eslint-disable-line valid-typeof
     classNames.push(blockName);
   }
 
@@ -31,17 +31,15 @@ export default function({ blockName, delimiters, hyphenate }, ...args) {
     const value = args[i];
 
     switch (typeof value) {
-      case 'string':
+      case TYPE_STRING:
         className = blockName + delimiters.element + value;
 
         classNames.push(className);
         break;
 
       case 'object': // Is modifier
-        if (value && value.constructor === Object) {
+        if (value && value.constructor === Object) { // Is not NULL
           classNames.push(...getModifiers(className, value, delimiters, hyphenate));
-        } else if (Array.isArray(value)) { // Is mixin
-          classNames.push(...value);
         }
 
         // no default

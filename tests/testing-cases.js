@@ -2,8 +2,8 @@
 export const block = 'BlockName';
 export const element = 'ElementName';
 export const directive = 'v-bem';
-export const mixinName = 'MixinName';
 export const namespace = 'namespace-';
+export const mixinClass = 'foo';
 export const delimiters = {
   element: '==',
   modifier: '++',
@@ -12,7 +12,12 @@ export const delimiters = {
 
 export const component = {
   name: 'TestComponent',
-  template: '<div>Content of test Component</div>'
+  template: '<div>Content of test Component</div>',
+  data() {
+    return {
+      mixinClass,
+    };
+  }
 };
 
 export const elementClassName = component.name + delimiters.element + element;
@@ -87,29 +92,17 @@ export const directiveAndMixinCases = {
     mixin: [element, { Modifier: 'Hyphenated' }],
     directive: `${directive}:${element}="{ Modifier: 'Hyphenated' }"`,
   },
-  [`${elementClassName} ${elementClassName}${delimiters.modifier}modifier${delimiters.value}hyphenated mixin-1 Mixin-2`]: {
-    mixin: [element, { Modifier: 'Hyphenated' }, ['mixin-1', 'Mixin-2']],
-    directive: `${directive}:${element}.mixin-1.Mixin-2="{ Modifier: 'Hyphenated' }"`,
+  [`${elementClassName} ${elementClassName}${delimiters.modifier}modifier${delimiters.value}hyphenated`]: {
+    mixin: [element, { Modifier: 'Hyphenated' }],
+    directive: `${directive}:${element}="{ Modifier: 'Hyphenated' }"`,
   },
   [`${component.name} ${component.name}${delimiters.modifier}modifier${delimiters.value}hyphenated`]: {
     mixin: [{ Modifier: 'Hyphenated' }],
     directive: `${directive}="{ Modifier: 'Hyphenated' }"`,
   },
-  [`${component.name} ${component.name}${delimiters.modifier}modifier${delimiters.value}hyphenated mixin-1 Mixin-2`]: {
-    mixin: [{ Modifier: 'Hyphenated' }, ['mixin-1', 'Mixin-2']],
-    directive: `${directive}.mixin-1.Mixin-2="{ Modifier: 'Hyphenated' }"`,
-  },
-  [`${component.name} mixin-1 Mixin-2`]: {
-    mixin: [['mixin-1', 'Mixin-2']],
-    directive: `${directive}.mixin-1.Mixin-2`,
-  },
-  [`${component.name} mixin`]: {
-    mixin: [null, null, ['mixin']],
-    directive: `${directive}.mixin`,
-  },
-  [`${elementClassName} mixin`]: {
-    mixin: [element, null, ['mixin']],
-    directive: `${directive}:${element}.mixin`,
+  [`${component.name} ${component.name}${delimiters.modifier}modifier${delimiters.value}hyphenated`]: {
+    mixin: [{ Modifier: 'Hyphenated' }],
+    directive: `${directive}.modifier="{ Modifier: 'Hyphenated' }"`,
   },
   [`${component.name} ${component.name}${delimiters.modifier}modifier2${delimiters.value}hyphenated`]: {
     mixin: [null, { Modifier2: 'Hyphenated' }, null],

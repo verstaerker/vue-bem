@@ -63,8 +63,8 @@ export default {
      * Adds BEM classes to the element with the directive.
      *
      * e.g.
-     * input `v-bem:element.mixin="modifiers"`
-     * output `class="componentName componentName__element componentName--modifier mixin"`
+     * input `v-bem:element="modifiers"`
+     * output `class="componentName componentName__element componentName--modifier"`
      */
     Vue.directive('bem', {
       /**
@@ -81,7 +81,6 @@ export default {
           modifiers,
           className
         } = getBEM(binding, vnode);
-        const mixins = Object.keys(binding.modifiers);
 
         addClass(el, element ? className : block);
 
@@ -90,10 +89,6 @@ export default {
             addClass(el, modifier);
           });
         }
-
-        mixins.forEach((mixin) => {
-          addClass(el, mixin);
-        });
       },
 
       /**

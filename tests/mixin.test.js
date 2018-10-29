@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { mount, createLocalVue } from '@vue/test-utils';
 import {
   component,
@@ -8,7 +9,7 @@ import mixin from '../src/modules/mixin';
 import plugin from '../src/modules/plugin';
 
 describe('Check invalid use of mixin', () => {
-  test('Expect global mixin to throw error because of missin plugin', () => {
+  test('Expect global mixin to throw error because of missing plugin', () => {
     const localVue = createLocalVue();
 
     localVue.mixin(mixin);
@@ -22,7 +23,7 @@ describe('Check invalid use of mixin', () => {
     }).toThrow();
   });
 
-  test('Expect local mixin to throw error because of missin plugin', () => {
+  test('Expect local mixin to throw error because of missing plugin', () => {
     const localVue = createLocalVue();
 
     spyOn(console, 'error'); // Prevent intended error log from showing.

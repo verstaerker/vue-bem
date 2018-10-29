@@ -5,7 +5,6 @@ import {
   element,
   namespace,
   directive,
-  mixinName,
   elementClassName, directiveAndMixinCases,
 } from './testing-cases';
 import plugin from '../dist/vue-bem.esm';
@@ -38,13 +37,13 @@ describe('Test default plugin settings', () => {
 
   const wrapper = mount({
     ...component,
-    template: `<div ${directive}:${element}.${mixinName}="{ Modifier: true }"></div>`,
+    template: `<div ${directive}:${element}="{ Modifier: true }"></div>`,
   }, {
     localVue
   });
 
   test('Expect that directive is available.', () => {
-    expect(wrapper.classes().join(' ')).toBe(`${component.name}__${element} ${component.name}__${element}--modifier MixinName`);
+    expect(wrapper.classes().join(' ')).toBe(`${component.name}__${element} ${component.name}__${element}--modifier`);
   });
 });
 
@@ -58,7 +57,7 @@ describe('Check custom plugin settings 1', () => {
 
   const wrapper = mount({
     ...component,
-    template: `<p ${directive}:${element}.${mixinName}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
+    template: `<p ${directive}:${element}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
   }, {
     localVue
   });
@@ -66,7 +65,7 @@ describe('Check custom plugin settings 1', () => {
   test('Expect custom hypenate and delimiters.', () => {
     expect(
       wrapper.classes().join(' ')
-    ).toBe(`${elementClassName} ${elementClassName}${delimiters.modifier}Modifier${delimiters.value}ModifierValue ${mixinName}`);
+    ).toBe(`${elementClassName} ${elementClassName}${delimiters.modifier}Modifier${delimiters.value}ModifierValue`);
   });
 });
 
@@ -83,7 +82,7 @@ describe('Check custom plugin settings 2', () => {
 
   const wrapper = mount({
     ...component,
-    template: `<p ${directive}:${element}.${mixinName}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
+    template: `<p ${directive}:${element}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
   }, {
     localVue
   });
@@ -91,7 +90,7 @@ describe('Check custom plugin settings 2', () => {
   test('Expect custom hypenate and delimiters.', () => {
     expect(
       wrapper.classes().join(' ')
-    ).toBe(`${namespace}test-component__element-name ${namespace}test-component__element-name--Modifier-ModifierValue ${mixinName}`);
+    ).toBe(`${namespace}test-component__element-name ${namespace}test-component__element-name--Modifier-ModifierValue`);
   });
 });
 

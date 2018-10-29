@@ -5,8 +5,9 @@ import {
   element,
   namespace,
   directive,
-  mixinName,
-  elementClassName, directiveAndMixinCases,
+  elementClassName,
+  directiveAndMixinCases,
+  mixinClass,
 } from './testing-cases';
 import plugin from '../src/modules/plugin';
 
@@ -38,13 +39,13 @@ describe('Test default plugin settings', () => {
 
   const wrapper = mount({
     ...component,
-    template: `<div ${directive}:${element}.${mixinName}="{ Modifier: true }"></div>`,
+    template: `<div ${directive}:${element}="{ Modifier: true }"></div>`,
   }, {
     localVue
   });
 
   test('Expect that directive is available.', () => {
-    expect(wrapper.classes().join(' ')).toBe(`${component.name}__${element} ${component.name}__${element}--modifier MixinName`);
+    expect(wrapper.classes().join(' ')).toBe(`${component.name}__${element} ${component.name}__${element}--modifier`);
   });
 });
 
@@ -58,7 +59,7 @@ describe('Check custom plugin settings 1', () => {
 
   const wrapper = mount({
     ...component,
-    template: `<p ${directive}:${element}.${mixinName}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
+    template: `<p ${directive}:${element}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
   }, {
     localVue
   });
@@ -66,7 +67,7 @@ describe('Check custom plugin settings 1', () => {
   test('Expect custom hypenate and delimiters.', () => {
     expect(
       wrapper.classes().join(' ')
-    ).toBe(`${elementClassName} ${elementClassName}${delimiters.modifier}Modifier${delimiters.value}ModifierValue ${mixinName}`);
+    ).toBe(`${elementClassName} ${elementClassName}${delimiters.modifier}Modifier${delimiters.value}ModifierValue`);
   });
 });
 
@@ -83,7 +84,7 @@ describe('Check custom plugin settings 2', () => {
 
   const wrapper = mount({
     ...component,
-    template: `<p ${directive}:${element}.${mixinName}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
+    template: `<p ${directive}:${element}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
   }, {
     localVue
   });
@@ -91,7 +92,7 @@ describe('Check custom plugin settings 2', () => {
   test('Expect custom hypenate and delimiters.', () => {
     expect(
       wrapper.classes().join(' ')
-    ).toBe(`${namespace}test-component__element-name ${namespace}test-component__element-name--Modifier-ModifierValue ${mixinName}`);
+    ).toBe(`${namespace}test-component__element-name ${namespace}test-component__element-name--Modifier-ModifierValue`);
   });
 });
 
@@ -113,6 +114,38 @@ describe('The directive works as expected', () => {
       expect(
         wrapper.classes().join(' ')
       ).toBe(output);
+    });
+  });
+
+  Object.entries(directiveAndMixinCases).forEach((testCase) => {
+    const [output, input] = testCase;
+    const wrapper = mount({
+      ...component,
+      template: `<p ${input.directive} class="${mixinClass}"><span></span></p>`,
+    }, {
+      localVue
+    });
+
+    test(`Expect element class to be ${output} when defining static class`, () => {
+      expect(
+        wrapper.classes().join(' ')
+      ).toBe(`${mixinClass} ${output}`);
+    });
+  });
+
+  Object.entries(directiveAndMixinCases).forEach((testCase) => {
+    const [output, input] = testCase;
+    const wrapper = mount({
+      ...component,
+      template: `<p ${input.directive} :class="mixinClass"><span></span></p>`,
+    }, {
+      localVue
+    });
+
+    test(`Expect element class to be ${output} when defining class binding`, () => {
+      expect(
+        wrapper.classes().join(' ')
+      ).toBe(`${mixinClass} ${output}`);
     });
   });
 });

@@ -1,6 +1,6 @@
 # @verstaerker/vue-bem
 
-A [Vue.js](https://vuejs.org/) directive to create [BEM](http://getbem.com/) class names.
+Adds a directive and (optional) mixin to your [Vue.js](https://vuejs.org/) project to create [BEM](http://getbem.com/) class names.
 
 This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn) and [vue-bem](https://github.com/AndersSchmidtHansen/vue-bem).
 
@@ -8,32 +8,77 @@ This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn)
 
 This plugin is currently in beta state and not recommended for productive use!
 
-## What's the difference to vue-bem-cn and vue-bem?
+## Comparison
 
-While vue-bem-cn is basically a method you can call to create a BEM class, vue-bem defines a custom directive (like this plugin) to create BEM classes. Both plugins have their downsides thought:
-
-* **vue-bem-cn** is not able to cache classes or prevent recalculating all classes on DOM changes.
-* **vue-bem** does not allow dynamic modifiers.
-
-This plugin tries to combine the positive effects of both those plugins:
-
-* The block/element class have only to be defined initially on the element
-* Caching is used if you enable hyphenation.
-* Dynamic modifiers can be used.
-* If the template is updated, but the modifiers did not change, classes will not be recalculated.
-
-### Limitations
-
-* You can not change the element name dynamically.
-* You can not change mixin classes dynamically. 
-* To prevent recalculation of unchanged modifiers you need to define a computed value which returns the modifier Object (instead of an inline attribute Object).
+<table>
+  <tbody>
+  <tr>
+    <th valign="top"></th>
+    <th>@verstaerker/vue-bem</th>
+    <th>vue-bem-cn</th>
+    <th>vue-bem (Vue 1)</th>
+  </tr>
+  <tr>
+    <th valign="top">Info</th>
+    <td valign="top">
+      <ul>
+        <li>Automatically class creation for block, element, modifier</li>
+        <li>Component name or custom property used as block name</li>
+        <li>Dynamic modifiers</li>
+        <li>Allows Boolean, Number and String values as modifiers</li>
+        <li>Prevents re-calculation of classes if modifiers did not change</li>
+        <li>Cache for String replacements</li>
+        <li>Only updates modifier classes on re-calculation</li>
+      </ul>
+    </td>
+    <td valign="top">
+      <ul>
+        <li>Automatic class creation for block, element, modifier and mixin</li>
+        <li>Component name or custom property used as block name</li>
+        <li>Dynamic element name</li>
+        <li>Dynamic modifiers</li>
+        <li>Dynamic mixins</li>
+        <li>Allows Boolean, Number and String values for modifiers</li>
+      </ul>
+    </td>
+    <td valign="top">
+      <ul>
+        <li>Automatic class creation for block, element, modifier</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <th valign="top">Limitations</th>
+    <td valign="top">
+      <ul>
+        <li>Static element name</li>
+        <li>Mixins must be defined with class attribute</li>
+        <li>Modifiers must be defined as computed property to allow "caching"</li>
+      </ul>
+    </td>
+    <td valign="top">
+      <ul>
+        <li>No caching</li>
+        <li>Recalculates on each component update</li>
+        <li>Updates all BEM classes when re-calculating</li>
+      </ul>
+    </td>
+    <td valign="top">
+      <ul>
+        <li>Deprecated</li>
+        <li>Static element and modifiers</li>
+      </ul>
+    </td>
+  </tr>
+  </tbody>
+</table>
 
 ## How to use the directive
 
 The vue-bem directive is used as any other Vue.js directive.
 
 ```
-v-bem<:element><.mixin>="<modifier>"
+v-bem<:element>="<modifier>"
 ```
 
 All parts are optional. If you only use `v-bem` you will still get the block class thought.
@@ -124,3 +169,7 @@ Note: There is no limit to the number of modifiers.
 <!-- will become -->
 <div class="block__element block__element--color-red mixin"></div>
 ```
+
+## TODO's
+
+- [ ] Browser testing
