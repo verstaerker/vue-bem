@@ -198,7 +198,7 @@ The following examples show how to create block, element and modifier classes. Y
 
 #### Only block
 
-```vue
+```html
 <div v-bem></div>
 
 <!-- will become -->
@@ -207,7 +207,7 @@ The following examples show how to create block, element and modifier classes. Y
 
 #### Only element
 
-```vue
+```html
 <div v-bem:element></div>
 
 <!-- will become -->
@@ -218,7 +218,7 @@ The following examples show how to create block, element and modifier classes. Y
 
 Note: There is no limit to the number of modifiers.
 
-```vue
+```html
 <!-- `modifiers` is a computed value returning `{ color: 'red' }` -->
 <div v-bem="modifiers"></div> 
 
@@ -228,7 +228,7 @@ Note: There is no limit to the number of modifiers.
 
 #### All together
 
-```vue
+```html
 <!-- `modifiers` is a computed value returning `{ visible: true }` -->
 <div v-bem:element="modifiers"></div>
 
