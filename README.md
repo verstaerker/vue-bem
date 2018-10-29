@@ -120,6 +120,12 @@ A value can be given to each modifier (which will be concatenated using the `val
 
 ## Install
 
+To install the npm package run
+
+```
+npm i @verstaerker/vue-bem --save
+```
+
 ### Directive
 
 The directive is delivered as a Vue plugin. You can install it as any other plugin:
@@ -139,7 +145,7 @@ To use the mixin you MUST install the plugin first. Then you can use the mixin a
 
 ```javascript
 // component.vue
-import bemMixin from '@verstaerker/vue-bem'
+import { bemMixin } from '@verstaerker/vue-bem'
 
 export default {
   mixins: [bemMixin],
