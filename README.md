@@ -26,7 +26,7 @@ This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn)
     <th valign="top">Info</th>
     <td valign="top">
       <ul>
-        <li>Automatically class creation for block, element, modifier</li>
+        <li>Automatic class creation for block, element, modifier</li>
         <li>Component name or custom property used as block name</li>
         <li>Dynamic modifiers</li>
         <li>Allows Boolean, Number and String values as modifiers</li>
