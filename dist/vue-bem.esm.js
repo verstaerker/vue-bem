@@ -169,13 +169,8 @@ function directive (_ref) {
           staticModifiers = _getBEM.staticModifiers,
           className = _getBEM.className;
 
-      var modifierClasses = staticModifiers || {};
+      var modifierClasses = Object.assign({}, staticModifiers, modifiers);
       addClass(el, element ? className : block);
-
-      if (modifiers) {
-        modifierClasses = Object.assign(modifierClasses, modifiers);
-      }
-
       getModifiers(className, modifierClasses, delimiters, hyphenateModifier).forEach(function (modifier) {
         return addClass(el, modifier);
       });

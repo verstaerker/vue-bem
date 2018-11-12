@@ -26,7 +26,7 @@ This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn)
     <th valign="top">Info</th>
     <td valign="top">
       <ul>
-        <li>Automatically class creation for block, element, modifier</li>
+        <li>Automatic class creation for block, element, modifier</li>
         <li>Component name or custom property used as block name</li>
         <li>Dynamic modifiers</li>
         <li>Allows Boolean, Number and String values as modifiers</li>
@@ -84,10 +84,10 @@ This Plugin was inspired by [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn)
 The vue-bem directive is used as any other Vue.js directive.
 
 ```
-v-bem<:element>="<modifier>"
+v-bem<:element><.static-modifiers>="<modifiers>"
 ```
 
-All parts are optional. If you only use `v-bem` you will still get the block class thought.
+All parts are optional. If you only use `v-bem` you will still get the block class though.
 
 ### Mixin
 
@@ -95,9 +95,13 @@ The mixin adds a `$bem` (or as configured) method to the extended component whic
 
 ```
 render(h) {
-  const className = this.$bem(<element> [, <modifier>]);
+  const className = this.$bem(<element> [, <modifiers>]);
 }
 ```
+
+#### Modifiers and static modifiers
+
+You can define two types of modifiers: dynamic and static. The dynamic ones can be given as value object to the directive (e.g. `v-bem="{ status: 'error' }` [note, that it is better practice to define a computed for modifiers to allow conditional updates]). Static ones can be defined as directive modifiers (e.g. `v-bem.column-right`). The advantage of static modifiers is the fact, that they will only be defined once when the component is rendered. Dynamic modifiers will overwrite static modifiers with the same (initial) name.
 
 ### Attributes
 
@@ -182,7 +186,7 @@ Defines the name of the bem method of the mixin.
 
 ### `hyphenate` (Boolean|Object)
 
-Allows to enable auto hyphenating of `block`, `element` and `modifiers`. Mixins are never touched. By default hyphenating is only applied to `modifiers` to allow the use of camelCase key names for the modifier Object. It is recommended to write `block` and `element` already in kebab case if you prepare so because it removes the conversion step.
+Allows to enable auto hyphenating of `block`, `element` and `modifiers`. Mixins are never touched. By default hyphenating is only applied to `modifiers` to allow the use of camelCase key names for the modifier Object. It is recommended to write `block` and `element` already in kebab case if you prepare so because it removes the conversion step. Hyphenation for `modifiers` will apply for static and dynamic modifiers.
 
 ### `delimiters` (Object)
 
@@ -216,7 +220,18 @@ The following examples show how to create block, element and modifier classes. Y
 <div class="block__element"></div>
 ```
 
-#### With modifier(s)
+#### With static modifier(s)
+
+Note: There is no limit to the number of modifiers.
+
+```html
+<div v-bem.columnRight></div> 
+
+<!-- will become -->
+<div class="block block--column-right"></div>
+```
+
+#### With dynamic modifier(s)
 
 Note: There is no limit to the number of modifiers.
 
@@ -226,6 +241,18 @@ Note: There is no limit to the number of modifiers.
 
 <!-- will become -->
 <div class="block block--color-red"></div>
+```
+
+#### With static and dynamic modifier(s)
+
+Note: There is no limit to the number of modifiers.
+
+```html
+<!-- `modifiers` is a computed value returning `{ color: 'red' }` -->
+<div v-bem.columnRight="modifiers"></div> 
+
+<!-- will become -->
+<div class="block block--column-right block--color-red"></div>
 ```
 
 #### All together

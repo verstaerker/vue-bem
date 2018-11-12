@@ -112,6 +112,10 @@ export const directiveAndMixinCases = {
     // mixin: [], - The mixin does not support static modifiers.
     directive: `${directive}.static-modifier1.static-modifier2`,
   },
+  [`${component.name}`]: {
+    // mixin: [], - The mixin does not support static modifiers.
+    directive: `${directive}.staticModifier="{ staticModifier: false }"`,
+  },
   [`${component.name} ${component.name}${delimiters.modifier}modifier2${delimiters.value}hyphenated`]: {
     mixin: [null, { Modifier2: 'Hyphenated' }, null],
     directive: `${directive}="{ Modifier2: 'Hyphenated' }"`,

@@ -70,13 +70,9 @@ export default function({ hyphenate, blockSource, namespace, delimiters }) { // 
         staticModifiers,
         className
       } = getBEM(binding, vnode);
-      let modifierClasses = staticModifiers || {};
+      const modifierClasses = Object.assign({}, staticModifiers, modifiers);
 
       addClass(el, element ? className : block);
-
-      if (modifiers) {
-        modifierClasses = Object.assign(modifierClasses, modifiers);
-      }
 
       getModifiers(className, modifierClasses, delimiters, hyphenateModifier)
         .forEach(modifier => addClass(el, modifier));
