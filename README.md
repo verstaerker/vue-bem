@@ -315,6 +315,10 @@ render(h) {
 }
 ```
 
+## Dependencies
+
+This Vue.js plugin/mixin has no 3rd party dependencies.
+
 ## License
 
 MIT
