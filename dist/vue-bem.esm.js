@@ -37,7 +37,7 @@ function _typeof(obj) {
  * @returns {String}
  */
 
-function hyphenateString(str) {
+function kebabCase(str) {
   return HYPHENATE_CACHE[str] // eslint-disable-line no-return-assign
   || (HYPHENATE_CACHE[str] = str.replace(/\B([A-Z])/g, '-$1').toLowerCase());
 }
@@ -74,7 +74,7 @@ function getModifiers(className, modifiers, delimiters, hyphenate) {
       }
     }
 
-    return modifierStump ? classNameWithDelimiter + (hyphenate ? hyphenateString(modifierStump) : modifierStump) : modifierStump;
+    return modifierStump ? classNameWithDelimiter + (hyphenate ? kebabCase(modifierStump) : modifierStump) : modifierStump;
   }).filter(Boolean);
 }
 /**
@@ -98,6 +98,128 @@ function removeClass(element, className) {
   element.classList.remove(className);
 }
 
+/**
+ * Adds BEM classes to the element with the directive.
+ *
+ * e.g.
+ * input `v-bem:element="modifiers"`
+ * output `class="componentName componentName__element componentName--modifier"`
+ *
+ * @param {Object} options - The directive options.
+ * @param {Boolean|Object} hyphenate - Defines if class elements should be converted to kebab-case.
+ * @param {String} blockSource - Defines where the block name should be taken from.
+ * @param {String} namespace - Adds a namespace to each block.
+ * @param {Object} delimiters - An Object which contains a list of delimiter Strings which should be used to glue the class sections.
+ *
+ * @returns {Object}
+ */
+
+function directive (_ref) {
+  var hyphenate = _ref.hyphenate,
+      blockSource = _ref.blockSource,
+      namespace = _ref.namespace,
+      delimiters = _ref.delimiters;
+  // eslint-disable-line object-curly-newline
+  var hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
+  var hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
+  /**
+   * Get BEM segments.
+   *
+   * @param {Object} binding - The Vue directive binding.
+   * @param {Object} vnode - The Vue directive vnode.
+   *
+   * @returns {Object}
+   */
+
+  function getBEM(binding, vnode) {
+    var modifiers = binding.value;
+    var block = namespace + vnode.context.$options[blockSource];
+    var element = binding.arg;
+
+    if (hyphenateBlockAndElement) {
+      block = kebabCase(block);
+
+      if (element) {
+        element = kebabCase(element);
+      }
+    }
+
+    return {
+      block: block,
+      element: element,
+      modifiers: modifiers,
+      staticModifiers: Object.keys(binding.modifiers).length ? binding.modifiers : null,
+      className: block + (element ? delimiters.element + element : '')
+    };
+  }
+
+  return {
+    /**
+     * Set block, element and modifier classes on element insert.
+     *
+     * @param {Node} el - The element with the directive.
+     * @param {Object} binding - Binding information.
+     * @param {Object} vnode - The virtual DOM node of the element.
+     */
+    inserted: function inserted(el, binding, vnode) {
+      var _getBEM = getBEM(binding, vnode),
+          block = _getBEM.block,
+          element = _getBEM.element,
+          modifiers = _getBEM.modifiers,
+          staticModifiers = _getBEM.staticModifiers,
+          className = _getBEM.className;
+
+      var modifierClasses = staticModifiers || {};
+      addClass(el, element ? className : block);
+
+      if (modifiers) {
+        modifierClasses = Object.assign(modifierClasses, modifiers);
+      }
+
+      getModifiers(className, modifierClasses, delimiters, hyphenateModifier).forEach(function (modifier) {
+        return addClass(el, modifier);
+      });
+    },
+
+    /**
+     * Add/remove modifier classes on update event.
+     *
+     * @param {Node} el - The element with the directive.
+     * @param {Object} binding - Binding information.
+     * @param {Object} vnode - The virtual DOM node of the element.
+     */
+    update: function update(el, binding, vnode) {
+      var modifiersValue = binding.value;
+      var oldModifiers = binding.oldValue;
+
+      if (modifiersValue !== oldModifiers) {
+        var _getBEM2 = getBEM(binding, vnode),
+            modifiers = _getBEM2.modifiers,
+            className = _getBEM2.className;
+
+        var modifierClasses = getModifiers(className, modifiers, delimiters, hyphenateModifier);
+
+        if (oldModifiers) {
+          var oldModifierClasses = getModifiers(className, oldModifiers, delimiters, hyphenateModifier);
+          oldModifierClasses.forEach(function (oldModifierClass) {
+            var index = modifierClasses.indexOf(oldModifierClass);
+
+            if (index === -1) {
+              removeClass(el, oldModifierClass);
+            } else {
+              modifierClasses.splice(index, 1); // Value will not be removed and needs not to be added therefore.
+            }
+          });
+        }
+
+        modifierClasses.forEach(function (modifierClass) {
+          addClass(el, modifierClass);
+        });
+      }
+    }
+  };
+}
+
 var plugin = {
   /**
    * Plugin install method.
@@ -112,111 +234,11 @@ var plugin = {
       delimiters: {}
     };
     var delimiters = Object.assign({}, DEFAULT_OPTIONS.delimiters, customOptions.delimiters);
-    var options = Object.assign({}, DEFAULT_OPTIONS, customOptions);
-    var hyphenate = options.hyphenate;
-    var hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
-    var hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
-    options.delimiters = delimiters;
-    Vue.prototype.$bemOptions = options;
-    /**
-     * Get BEM segments.
-     *
-     * @param {Object} binding - The Vue directive binding.
-     * @param {Object} vnode - The Vue directive vnode.
-     *
-     * @returns {Object}
-     */
-
-    function getBEM(binding, vnode) {
-      var modifiers = binding.value;
-      var block = options.namespace + vnode.context.$options[options.blockSource];
-      var element = binding.arg;
-
-      if (hyphenateBlockAndElement) {
-        block = hyphenateString(block);
-
-        if (element) {
-          element = hyphenateString(element);
-        }
-      }
-
-      return {
-        block: block,
-        element: element,
-        modifiers: modifiers,
-        className: block + (element ? delimiters.element + element : '')
-      };
-    }
-    /**
-     * Adds BEM classes to the element with the directive.
-     *
-     * e.g.
-     * input `v-bem:element="modifiers"`
-     * output `class="componentName componentName__element componentName--modifier"`
-     */
-
-
-    Vue.directive('bem', {
-      /**
-       * Set block, element and modifier classes on element insert.
-       *
-       * @param {Node} el - The element with the directive.
-       * @param {Object} binding - Binding information.
-       * @param {Object} vnode - The virtual DOM node of the element.
-       */
-      inserted: function inserted(el, binding, vnode) {
-        var _getBEM = getBEM(binding, vnode),
-            block = _getBEM.block,
-            element = _getBEM.element,
-            modifiers = _getBEM.modifiers,
-            className = _getBEM.className;
-
-        addClass(el, element ? className : block);
-
-        if (modifiers) {
-          getModifiers(className, modifiers, options.delimiters, hyphenateModifier).forEach(function (modifier) {
-            addClass(el, modifier);
-          });
-        }
-      },
-
-      /**
-       * Add/remove modifier classes on update event.
-       *
-       * @param {Node} el - The element with the directive.
-       * @param {Object} binding - Binding information.
-       * @param {Object} vnode - The virtual DOM node of the element.
-       */
-      update: function update(el, binding, vnode) {
-        var modifiersValue = binding.value;
-        var oldModifiers = binding.oldValue;
-
-        if (modifiersValue !== oldModifiers) {
-          var _getBEM2 = getBEM(binding, vnode),
-              modifiers = _getBEM2.modifiers,
-              className = _getBEM2.className;
-
-          var modifierClasses = getModifiers(className, modifiers, options.delimiters, hyphenateModifier);
-
-          if (oldModifiers) {
-            var oldModifierClasses = getModifiers(className, oldModifiers, options.delimiters, hyphenateModifier);
-            oldModifierClasses.forEach(function (oldModifierClass) {
-              var index = modifierClasses.indexOf(oldModifierClass);
-
-              if (index === -1) {
-                removeClass(el, oldModifierClass);
-              } else {
-                modifierClasses.splice(index, 1); // Value will not be removed and needs not to be added therefore.
-              }
-            });
-          }
-
-          modifierClasses.forEach(function (modifierClass) {
-            addClass(el, modifierClass);
-          });
-        }
-      }
+    var options = Object.assign({}, DEFAULT_OPTIONS, customOptions, {
+      delimiters: delimiters
     });
+    Vue.prototype.$bemOptions = options;
+    Vue.directive('bem', directive(options));
   }
 };
 
@@ -277,7 +299,7 @@ var mixin = {
       var hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
       var hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
       var namespacedBlock = (namespace || '') + block;
-      var blockName = hyphenateBlockAndElement ? hyphenateString(namespacedBlock) : namespacedBlock;
+      var blockName = hyphenateBlockAndElement ? kebabCase(namespacedBlock) : namespacedBlock;
 
       this[method] = function () {
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {

@@ -72,8 +72,10 @@ describe('Check mixin output', () => {
   Object.entries(directiveAndMixinCases).forEach((testCase) => {
     const [output, input] = testCase;
 
-    test(`Return of the mixins "$bem" is "${output}"`, () => {
-      expect(vm.$bem(...input.mixin)).toBe(output);
-    });
+    if (input.mixin) {
+      test(`Return of the mixins "$bem" is "${output}"`, () => {
+        expect(vm.$bem(...input.mixin)).toBe(output);
+      });
+    }
   });
 });

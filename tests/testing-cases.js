@@ -1,4 +1,4 @@
-/* eslint-disable quote-props */
+/* eslint-disable quote-props max-len */
 export const block = 'BlockName';
 export const element = 'ElementName';
 export const directive = 'v-bem';
@@ -102,7 +102,15 @@ export const directiveAndMixinCases = {
   },
   [`${component.name} ${component.name}${delimiters.modifier}modifier${delimiters.value}hyphenated`]: {
     mixin: [{ Modifier: 'Hyphenated' }],
-    directive: `${directive}.modifier="{ Modifier: 'Hyphenated' }"`,
+    directive: `${directive}="{ Modifier: 'Hyphenated' }"`,
+  },
+  [`${component.name} ${component.name}${delimiters.modifier}static-modifier ${component.name}${delimiters.modifier}modifier${delimiters.value}hyphenated`]: {
+    // mixin: [], - The mixin does not support static modifiers.
+    directive: `${directive}.staticModifier="{ Modifier: 'Hyphenated' }"`,
+  },
+  [`${component.name} ${component.name}${delimiters.modifier}static-modifier1 ${component.name}${delimiters.modifier}static-modifier2`]: {
+    // mixin: [], - The mixin does not support static modifiers.
+    directive: `${directive}.static-modifier1.static-modifier2`,
   },
   [`${component.name} ${component.name}${delimiters.modifier}modifier2${delimiters.value}hyphenated`]: {
     mixin: [null, { Modifier2: 'Hyphenated' }, null],
