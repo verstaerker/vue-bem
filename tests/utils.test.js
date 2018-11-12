@@ -1,7 +1,7 @@
 /* eslint-disable padded-blocks */
 
 import {
-  hyphenateString,
+  kebabCase,
   getModifiers,
   addClass,
   removeClass,
@@ -14,7 +14,7 @@ import {
 } from './testing-cases';
 import { HYPHENATE_CACHE } from '../src/modules/shared';
 
-describe('hyphenateString', () => {
+describe('kebabCase', () => {
 
   Object.entries(hyphenateStringCases).forEach((entity) => {
     const [input, output] = entity;
@@ -24,7 +24,7 @@ describe('hyphenateString', () => {
     });
 
     test(`Expected "${input}" to become "${output}".`, () => {
-      expect(hyphenateString(input)).toBe(output);
+      expect(kebabCase(input)).toBe(output);
     });
 
     test(`Expect "HYPHENATE_CACHE" to contain an entry for ${input}`, () => {

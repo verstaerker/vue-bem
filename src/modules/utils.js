@@ -7,7 +7,7 @@ import { HYPHENATE_CACHE, TYPE_STRING } from './shared';
  *
  * @returns {String}
  */
-export function hyphenateString(str) {
+export function kebabCase(str) {
   return HYPHENATE_CACHE[str] // eslint-disable-line no-return-assign
     || (HYPHENATE_CACHE[str] = str.replace(/\B([A-Z])/g, '-$1').toLowerCase());
 }
@@ -45,7 +45,7 @@ export function getModifiers(className, modifiers, delimiters, hyphenate) { // e
     }
 
     return modifierStump
-      ? classNameWithDelimiter + (hyphenate ? hyphenateString(modifierStump) : modifierStump)
+      ? classNameWithDelimiter + (hyphenate ? kebabCase(modifierStump) : modifierStump)
       : modifierStump;
   }).filter(Boolean);
 }

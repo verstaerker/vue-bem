@@ -1,4 +1,4 @@
-import { hyphenateString } from './utils';
+import { kebabCase } from './utils';
 import { TYPE_STRING } from './shared';
 import bem from './bem';
 
@@ -17,7 +17,7 @@ const mixin = {
       const hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;
       const hyphenateModifier = hyphenate === true || (hyphenate || {}).modifier || false;
       const namespacedBlock = (namespace || '') + block;
-      const blockName = hyphenateBlockAndElement ? hyphenateString(namespacedBlock) : namespacedBlock;
+      const blockName = hyphenateBlockAndElement ? kebabCase(namespacedBlock) : namespacedBlock;
 
       this[method] = (...args) => bem({ blockName, delimiters, hyphenate: hyphenateModifier }, ...args);
     }
