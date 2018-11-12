@@ -106,10 +106,10 @@ function removeClass(element, className) {
  * output `class="componentName componentName__element componentName--modifier"`
  *
  * @param {Object} options - The directive options.
- * @param {Boolean|Object} hyphenate - Defines if class elements should be converted to kebab-case.
- * @param {String} blockSource - Defines where the block name should be taken from.
- * @param {String} namespace - Adds a namespace to each block.
- * @param {Object} delimiters - An Object which contains a list of delimiter Strings which should be used to glue the class sections.
+ * @param {Boolean|Object} options.hyphenate - Defines if class elements should be converted to kebab-case.
+ * @param {String} options.blockSource - Defines where the block name should be taken from.
+ * @param {String} options.namespace - Adds a namespace to each block.
+ * @param {Object} options.delimiters - An Object which contains a list of delimiter Strings to glue the class sections.
  *
  * @returns {Object}
  */
