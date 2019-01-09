@@ -1,7 +1,8 @@
 var TYPE_STRING = 'string';
+var DEFAULT_BLOCK_SOURCE = 'name';
 var DEFAULT_OPTIONS = {
   namespace: '',
-  blockSource: 'name',
+  blockSource: DEFAULT_BLOCK_SOURCE,
   method: '$bem',
   hyphenate: {
     blockAndElement: false,
@@ -133,7 +134,8 @@ function directive (_ref) {
 
   function getBEM(binding, vnode) {
     var modifiers = binding.value;
-    var block = namespace + vnode.context.$options[blockSource];
+    var $options = vnode.context.$options;
+    var block = namespace + ($options[blockSource] || $options[DEFAULT_BLOCK_SOURCE]);
     var element = binding.arg;
 
     if (hyphenateBlockAndElement) {
@@ -145,8 +147,6 @@ function directive (_ref) {
     }
 
     return {
-      block: block,
-      element: element,
       modifiers: modifiers,
       staticModifiers: Object.keys(binding.modifiers).length ? binding.modifiers : null,
       className: block + (element ? delimiters.element + element : '')
@@ -163,14 +163,12 @@ function directive (_ref) {
      */
     inserted: function inserted(el, binding, vnode) {
       var _getBEM = getBEM(binding, vnode),
-          block = _getBEM.block,
-          element = _getBEM.element,
           modifiers = _getBEM.modifiers,
           staticModifiers = _getBEM.staticModifiers,
           className = _getBEM.className;
 
       var modifierClasses = Object.assign({}, staticModifiers, modifiers);
-      addClass(el, element ? className : block);
+      addClass(el, className);
       getModifiers(className, modifierClasses, delimiters, hyphenateModifier).forEach(function (modifier) {
         return addClass(el, modifier);
       });
@@ -287,7 +285,7 @@ var mixin = {
         delimiters = _ref.delimiters,
         method = _ref.method;
 
-    var block = this.$options[blockSource];
+    var block = this.$options[blockSource] || this.$options[DEFAULT_BLOCK_SOURCE];
 
     if (block && _typeof(block) === TYPE_STRING) {
       // eslint-disable-line valid-typeof
