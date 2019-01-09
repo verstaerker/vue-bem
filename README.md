@@ -163,6 +163,7 @@ export default {
 // Defaults
 {
   namespace: '',
+  blockSource: 'name'
   method: '$bem'
   hyphenate: {
     blockAndElement: false,
@@ -178,17 +179,31 @@ export default {
 
 ### `namespace` (String)
 
+default: `''`
+
 Can be used to add a static namespace to the beginning of every class. Must include the delimiter.
 
-### `mixin` (String)
+### `blockSource` (String)
 
-Defines the name of the bem method of the mixin.
+default: `name`
+
+Defines the component property which will be used to create the BEM block name. `name` will also be used as fallback in case the given blockSource is not available.
+
+### `method` (String)
+
+default: `$bem`
+
+Defines the name of the bem method when used as mixin.
 
 ### `hyphenate` (Boolean|Object)
+
+default: `{ blockAndElement: false, modifier: true }`
 
 Allows to enable auto hyphenating of `block`, `element` and `modifiers`. Mixins are never touched. By default hyphenating is only applied to `modifiers` to allow the use of camelCase key names for the modifier Object. It is recommended to write `block` and `element` already in kebab case if you prepare so because it removes the conversion step. Hyphenation for `modifiers` will apply for static and dynamic modifiers.
 
 ### `delimiters` (Object)
+
+default: `{ element: '__', modifier: '--', value: '-', }`
 
 Allows to define custom delimiters between `block`, `element` and `modifier`.
 

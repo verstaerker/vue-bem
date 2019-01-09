@@ -1,5 +1,5 @@
 import { kebabCase } from './utils';
-import { TYPE_STRING } from './shared';
+import { TYPE_STRING, DEFAULT_BLOCK_SOURCE } from './shared';
 import bem from './bem';
 
 const mixin = {
@@ -11,7 +11,7 @@ const mixin = {
       delimiters,
       method
     } = this.$bemOptions || {};
-    const block = this.$options[blockSource];
+    const block = this.$options[blockSource] || this.$options[DEFAULT_BLOCK_SOURCE];
 
     if (block && typeof block === TYPE_STRING) { // eslint-disable-line valid-typeof
       const hyphenateBlockAndElement = hyphenate === true || (hyphenate || {}).blockAndElement || false;

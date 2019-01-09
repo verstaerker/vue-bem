@@ -96,6 +96,48 @@ describe('Check custom plugin settings 2', () => {
   });
 });
 
+describe('Check custom plugin settings 3', () => {
+  const localVue = createLocalVue();
+
+  localVue.use(plugin, {
+    blockSource: 'block'
+  });
+
+  const wrapper = mount({
+    ...component,
+    template: `<p ${directive}:${element}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
+  }, {
+    localVue
+  });
+
+  test('Expect custom block source to work.', () => {
+    expect(
+      wrapper.classes().join(' ')
+    ).toBe(`${component.block}__${element} ${component.block}__${element}--modifier-modifier-value`);
+  });
+});
+
+describe('Check custom plugin settings 4', () => {
+  const localVue = createLocalVue();
+
+  localVue.use(plugin, {
+    blockSource: 'undefinedProperty'
+  });
+
+  const wrapper = mount({
+    ...component,
+    template: `<p ${directive}:${element}="{ Modifier: 'ModifierValue' }"><span></span></p>`,
+  }, {
+    localVue
+  });
+
+  test('Expect missing block source to fall back to default.', () => {
+    expect(
+      wrapper.classes().join(' ')
+    ).toBe(`${component.name}__${element} ${component.name}__${element}--modifier-modifier-value`);
+  });
+});
+
 describe('The directive works as expected', () => {
   const localVue = createLocalVue();
 

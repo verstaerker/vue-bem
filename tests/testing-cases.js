@@ -12,6 +12,7 @@ export const delimiters = {
 
 export const component = {
   name: 'TestComponent',
+  block: 'CustomBlockSource',
   template: '<div>Content of test Component</div>',
   data() {
     return {

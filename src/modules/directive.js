@@ -1,3 +1,4 @@
+import { DEFAULT_BLOCK_SOURCE } from './shared';
 import {
   addClass,
   getModifiers,
@@ -34,7 +35,8 @@ export default function({ hyphenate, blockSource, namespace, delimiters }) { // 
    */
   function getBEM(binding, vnode) {
     const modifiers = binding.value;
-    let block = namespace + vnode.context.$options[blockSource];
+    const { $options } = vnode.context;
+    let block = namespace + ($options[blockSource] || $options[DEFAULT_BLOCK_SOURCE]);
     let element = binding.arg;
 
     if (hyphenateBlockAndElement) {
@@ -46,8 +48,6 @@ export default function({ hyphenate, blockSource, namespace, delimiters }) { // 
     }
 
     return {
-      block,
-      element,
       modifiers,
       staticModifiers: Object.keys(binding.modifiers).length ? binding.modifiers : null,
       className: block + (element ? delimiters.element + element : ''),
@@ -64,15 +64,13 @@ export default function({ hyphenate, blockSource, namespace, delimiters }) { // 
      */
     inserted(el, binding, vnode) {
       const {
-        block,
-        element,
         modifiers,
         staticModifiers,
         className
       } = getBEM(binding, vnode);
       const modifierClasses = Object.assign({}, staticModifiers, modifiers);
 
-      addClass(el, element ? className : block);
+      addClass(el, className);
 
       getModifiers(className, modifierClasses, delimiters, hyphenateModifier)
         .forEach(modifier => addClass(el, modifier));
