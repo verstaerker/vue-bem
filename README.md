@@ -157,6 +157,24 @@ export default {
 }
 ```
 
+#### Import fallback
+
+Note: under some circumstances the above import will not work (e.g. when using [vue-styleguidist](https://github.com/vue-styleguidist/vue-styleguidist)). In this case you can try to use the following strategy:
+
+```javascript
+// component.vue
+import * as bem from '@verstaerker/vue-bem'
+
+export default {
+  mixins: [bem.bemMixin],
+  render(h) {
+    const className = this.$bem('element');
+    
+    // ...
+  }
+}
+```
+
 ## Settings
 
 ```
