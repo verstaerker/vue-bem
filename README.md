@@ -1,3 +1,7 @@
+**⚠️ Not maintained anymore, since the performance turned out to be not better than [vue-bem-cn](https://github.com/c01nd01r/vue-bem-cn), which I would still recommend instead.**
+
+---
+
 # @verstaerker/vue-bem
 
 Adds a directive and (optional) mixin to your [Vue.js](https://vuejs.org/) project to create [BEM](http://getbem.com/) class names.
